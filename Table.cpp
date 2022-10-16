@@ -22,11 +22,9 @@ int Table::Input() {
 void Table::Output() {
 	bool flag = false;
 	for (int i = 0; i < size; i++) {
-		if (T[i] != NULL) {
 			T[i]->output();
 			flag = true;
 		}
-	}
 	if (!flag)
 		std::cout << "There is no to output!" << std::endl;
 }
@@ -35,7 +33,7 @@ void Table::Output() {
 void Table::Sort() {
 	for (int i = 0; i < size; i++) {
 		for (int j = i + 1; j < size; j++) {
-			if ((T[i] != NULL) && (T[j] != NULL) && (T[i]->cmp(*T[j]) > 0))
+			if (T[i]->cmp(*T[j]) > 0)
 				std::swap(T[i], T[j]);
 		}
 	}
@@ -44,7 +42,7 @@ void Table::Sort() {
 // Поиск клиента в таблице, возвращает индекс найденного клиента или -1 если клиент не найден
 int Table::Search(const Client& tempClient) {
 	for (int i = 0; i < size; i++) {
-		if (T[i] != NULL && T[i]->equal(tempClient))
+		if (T[i]->equal(tempClient))
 			return i;
 	}
 	return -1;
@@ -69,21 +67,29 @@ void Table::Replace(Client* newClient) {
 	}
 }
 
+// Пересоздаёт таблицу после удаления клиентов
+Client** Resize(Client** myTable, int newsize) {
+	Client** arr = NULL;
+	arr = new Client * [newsize];
+	for (int i = 0; i < newsize; i++) {
+		arr[i] = new Client;
+		arr[i] = myTable[i];
+	}
+	return arr;
+}
+
 // Удаление всех вхождений
 void Table::Remove(Client& badClient) {
 	int index = Search(badClient);
 	while (index != -1) {
 		delete[] T[index]->name;
 		delete T[index];
+		T[index] = NULL;
 		for (int i = index; i < size - 1; i++) {
 			T[i] = T[i + 1];
 		}
-		size--; // TODO: сделаем вид что никакой утечки памяти нет
-		/*Client** newTable = NULL;
-		newTable = new Client * [size];
-		for (int i = 0; i < size; i++) {
-			newTable[i] = T[i];
-		}*/
+		size--;
 		index = Search(badClient);
 	}
+	T = Resize(T, size);
 }

@@ -13,10 +13,10 @@ int main() {
 	myT.Output();
 	std::cout << std::endl;
 
-	std::cout << "Enter new client for Replace:" << std::endl;
+	std::cout << "Enter new client for Remove:" << std::endl;
 	Client one;
 	one.input();
-	myT.Replace(&one);
+	myT.Remove(one);
 
 	std::cout << std::endl;
 	myT.Output();
