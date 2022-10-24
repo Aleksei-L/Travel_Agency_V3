@@ -1,25 +1,25 @@
 #include "Table.h"
 
 int main() {
-	Table myT;
+	Table* myT = new Table;
 
-	myT.size = 3; // TODO: ѕродумать задание размера пользователем
-	myT.T = myT.Init(myT.size);
+	// TODO: ѕродумать задание размера пользователем
+	myT = myT->Init(3);
 
-	myT.Input();
+	myT->Input();
 	std::cout << std::endl;
-	myT.Sort();
+	myT->Sort();
 	std::cout << std::endl;
-	myT.Output();
+	myT->Output();
 	std::cout << std::endl;
 
-	std::cout << "Enter new client for Remove:" << std::endl;
+	/*std::cout << "Enter new client for Remove:" << std::endl;
 	Client one;
 	one.input();
 	myT.Remove(one);
 
 	std::cout << std::endl;
-	myT.Output();
+	myT.Output();*/
 
 	return 0;
 }

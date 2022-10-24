@@ -2,17 +2,19 @@
 #include "Table.h"
 
 // Выделение памяти под таблицу
-Client** Table::Init(int size) {
-	Client** arr = NULL;
-	arr = new Client * [size];
-	return arr;
+Table* Table::Init(int size) {
+	Table* t = new Table;
+	t->size = size;
+	t->m = new Client * [size];
+	t->last = NULL;
+	return t;
 }
 
 // Ввод таблицы
 int Table::Input() {
 	for (int i = 0; i < size; i++) {
-		T[i] = new Client;
-		T[i]->input();
+		m[i] = new Client;
+		m[i]->input();
 	}
 	return !std::cin.eof();
 }
@@ -22,9 +24,9 @@ int Table::Input() {
 void Table::Output() {
 	bool flag = false;
 	for (int i = 0; i < size; i++) {
-			T[i]->output();
-			flag = true;
-		}
+		m[i]->output();
+		flag = true;
+	}
 	if (!flag)
 		std::cout << "There is no to output!" << std::endl;
 }
@@ -33,8 +35,8 @@ void Table::Output() {
 void Table::Sort() {
 	for (int i = 0; i < size; i++) {
 		for (int j = i + 1; j < size; j++) {
-			if (T[i]->cmp(*T[j]) > 0)
-				std::swap(T[i], T[j]);
+			if (m[i]->cmp(*m[j]) > 0)
+				std::swap(m[i], m[j]);
 		}
 	}
 }
@@ -42,7 +44,7 @@ void Table::Sort() {
 // Поиск клиента в таблице, возвращает индекс найденного клиента или -1 если клиент не найден
 int Table::Search(const Client& tempClient) {
 	for (int i = 0; i < size; i++) {
-		if (T[i]->equal(tempClient))
+		if (m[i]->equal(tempClient))
 			return i;
 	}
 	return -1;
@@ -58,10 +60,10 @@ void Table::Replace(Client* newClient) {
 	// Поиск и замена
 	int index = Search(oldClient);
 	while (index != -1) {
-		delete[] T[index]->name;
-		delete T[index];
+		delete[] m[index]->name;
+		delete m[index];
 
-		T[index] = newClient;
+		m[index] = newClient;
 
 		index = Search(oldClient);
 	}
@@ -82,14 +84,14 @@ Client** Resize(Client** myTable, int newsize) {
 void Table::Remove(Client& badClient) {
 	int index = Search(badClient);
 	while (index != -1) {
-		delete[] T[index]->name;
-		delete T[index];
-		T[index] = NULL;
+		delete[] m[index]->name;
+		delete m[index];
+		m[index] = NULL;
 		for (int i = index; i < size - 1; i++) {
-			T[i] = T[i + 1];
+			m[i] = m[i + 1];
 		}
 		size--;
 		index = Search(badClient);
 	}
-	T = Resize(T, size);
+	m = Resize(m, size);
 }

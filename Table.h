@@ -4,8 +4,9 @@
 
 struct Table {
 	int size; // Размер таблицы
-	Client** T; // Таблица клиентов
-	Client** Init(int size);
+	Client** m; // Таблица клиентов
+	Client** last; // Указатель на последний
+	Table* Init(int size);
 	int Input();
 	void Output();
 	void Sort();
