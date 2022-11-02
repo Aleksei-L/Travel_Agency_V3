@@ -6,26 +6,68 @@ Table* Table::Init(int size) {
 	Table* t = new Table;
 	t->size = size;
 	t->m = new Client * [size];
-	t->last = NULL;
 	return t;
+}
+
+// Увеличение размера таблицы по запросу пользователя
+void Table::Resize(int newsize) {
+	
+}
+
+// Создание копии объекта в динамической памяти
+Client* Table::Copy(Client client) {
+	Client* newClient = new Client;
+
+	newClient->name = new char[strlen(client.name) + 1];
+	strcpy_s(newClient->name, strlen(client.name) + 1, client.name);
+
+	strcpy_s(newClient->city, strlen(client.city) + 1, client.city);
+
+	newClient->phone = client.phone;
+
+	newClient->age = client.age;
+
+	return newClient;
+}
+
+// Вставка нового клиента в таблицу
+Client** Table::Insert(Client newClient) {
+	if (current - m < size) {
+		*current++ = Copy(newClient);
+		return current;
+	}
+	return NULL; // TODO: Предложение пользователю увеличить размер таблицы
+	/*Resize(size);
+	*current++ = Copy(newClient);
+	return current;*/
 }
 
 // Ввод таблицы
 int Table::Input() {
-	for (int i = 0; i < size; i++) {
+	// Выделение памяти под каждую ячейку таблицы
+	for (int i = 0; i < size; i++)
 		m[i] = new Client;
-		m[i]->input();
+
+	// Установка указателя на первое свободное место в первую ячейку
+	current = &m[0];
+
+	// Ввод данных в таблицу
+	for (int i = 0; i < size; i++) {
+		Client newClient;
+		newClient.input();
+		Insert(newClient);
 	}
 	return !std::cin.eof();
 }
 
-// TODO: Выводить номер клиента и разделители между клиентами
 // Вывод таблицы
 void Table::Output() {
 	bool flag = false;
 	for (int i = 0; i < size; i++) {
+		std::cout << "Client #" << i + 1 << std::endl;
 		m[i]->output();
 		flag = true;
+		std::cout << std::endl;
 	}
 	if (!flag)
 		std::cout << "There is no to output!" << std::endl;
@@ -69,10 +111,9 @@ void Table::Replace(Client* newClient) {
 	}
 }
 
-// Пересоздаёт таблицу после удаления клиентов
-Client** Resize(Client** myTable, int newsize) {
-	Client** arr = NULL;
-	arr = new Client * [newsize];
+// Уменьшает размер таблицы после удаления клиентов
+Client** SizeMinus(Client** myTable, int newsize) {
+	Client** arr = new Client * [newsize];
 	for (int i = 0; i < newsize; i++) {
 		arr[i] = new Client;
 		arr[i] = myTable[i];
@@ -91,7 +132,8 @@ void Table::Remove(Client& badClient) {
 			m[i] = m[i + 1];
 		}
 		size--;
+		current--;
 		index = Search(badClient);
 	}
-	m = Resize(m, size);
+	m = SizeMinus(m, size);
 }

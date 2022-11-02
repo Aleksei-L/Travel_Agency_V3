@@ -3,8 +3,9 @@
 int main() {
 	Table* myT = new Table;
 
-	// TODO: ѕродумать задание размера пользователем
-	myT = myT->Init(3);
+	std::cout << "Enter Table's size: ";
+	std::cin >> myT->size;
+	myT = myT->Init(myT->size);
 
 	myT->Input();
 	std::cout << std::endl;
@@ -12,14 +13,14 @@ int main() {
 	std::cout << std::endl;
 	myT->Output();
 	std::cout << std::endl;
-
-	/*std::cout << "Enter new client for Remove:" << std::endl;
+	
+	std::cout << "Enter new client for Replace:" << std::endl;
 	Client one;
 	one.input();
-	myT.Remove(one);
+	myT->Replace(&one);
 
 	std::cout << std::endl;
-	myT.Output();*/
-
+	myT->Output();
+	
 	return 0;
 }
