@@ -10,8 +10,11 @@ Table* Table::Init(int size) {
 }
 
 // Увеличение размера таблицы по запросу пользователя
+// TODO: написать функцию
 void Table::Resize(int newsize) {
-	
+	/*Client** newTable = new Client * [newsize];
+	for (int i = 0; i < newsize; i++)
+		newTable[i] = new Client;*/
 }
 
 // Создание копии объекта в динамической памяти
